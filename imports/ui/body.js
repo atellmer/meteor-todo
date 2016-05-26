@@ -9,17 +9,29 @@ import './body.html';
 
 Template.body.onCreated(function bodyOnCreated() {
 	this.state = new ReactiveDict();
+	Meteor.subscribe('tasks');
 });
+
 
 Template.body.helpers({
 	tasks() {
 		const instance = Template.instance();
 		if (instance.state.get('hideCompleted')) {
 			// If hide completed is checked, filter tasks
-			return Tasks.find({ checked: false }, { sort: { createdAt: -1 } });
+			return Tasks.find(
+				{ 
+					checked: false 
+				}, 
+				{ 
+					sort: { createdAt: -1 } 
+				});
 		}
 		// Show newest tasks at the top
-		return Tasks.find({}, { sort: { createdAt: -1 } });
+		return Tasks.find(
+			{}, 
+			{ 
+				sort: { createdAt: -1 } 
+			});
 	},
 	incompleteCount() {
     	return Tasks.find({ checked: false }).count();
